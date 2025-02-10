@@ -1,5 +1,6 @@
 package org.bsutherla1.jade;
 
+import org.bsutherla1.util.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -10,16 +11,38 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
+    public float r = 1.0f;
+    public float g = 1.0f;
+    public float b = 1.0f;
+    public float a = 1.0f;
+
     private int width, height;
     private String title;
     private long glfwWindow;
 
     private static Window window = null;
 
+    private static Scene currentScene = null;
+
     private Window() {
         width = 640;
         height = width / 4 * 3;
         title = "Mario";
+    }
+
+    public static void changeScene(int newScene) {
+        switch (newScene) {
+            case 0:
+                currentScene = new LevelEditorScene();
+                //init scene
+                break;
+            case 1:
+                currentScene = new LevelScene();
+                break;
+            default:
+                assert false : "Unknown scene: " + newScene;
+                break;
+        }
     }
 
     public static Window get() {
@@ -88,26 +111,31 @@ public class Window {
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
+
+        Window.changeScene(0);
     }
 
     public void loop() {
+        float beginTime = Time.getTime();
+        float endTime = Time.getTime();
+        float dt = -1.0f;
+
         while (!glfwWindowShouldClose(glfwWindow)) {
             // Poll Events
             glfwPollEvents();
 
-            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-                System.out.println("Space key is pressed");
-            }
-
-            JoystickListener.pullEvents(GLFW_JOYSTICK_1);
-            if (JoystickListener.isHatUpPressed(GLFW_JOYSTICK_1, 0)) {
-                System.out.println("Up Button was pressed.");
+            if (dt >= 0) {
+                currentScene.update(dt);
             }
 
             glfwSwapBuffers(glfwWindow);
+
+            endTime = Time.getTime();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
     }
 }
