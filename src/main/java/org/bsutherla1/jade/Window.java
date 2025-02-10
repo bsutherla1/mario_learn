@@ -71,6 +71,9 @@ public class Window {
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
 
+        JoystickListener.init();
+        glfwSetJoystickCallback(JoystickListener::joystickCallback);
+
         // Make the OpenGL Context Current
         glfwMakeContextCurrent(glfwWindow);
         // Enable v-sync
@@ -97,6 +100,11 @@ public class Window {
 
             if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
                 System.out.println("Space key is pressed");
+            }
+
+            JoystickListener.pullEvents(GLFW_JOYSTICK_1);
+            if (JoystickListener.isHatUpPressed(GLFW_JOYSTICK_1, 0)) {
+                System.out.println("Up Button was pressed.");
             }
 
             glfwSwapBuffers(glfwWindow);
