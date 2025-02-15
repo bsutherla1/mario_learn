@@ -24,7 +24,7 @@ public class Shader {
         try {
             String source = new String(Files.readAllBytes(Paths.get(filepath)));
             vertexSource = getShaderSource(source, Type.Vertex);
-            fragmentSource = getShaderSource(source, Type.Fragment, vertexSource.length());
+            fragmentSource = getShaderSource(source, Type.Fragment);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -41,19 +41,20 @@ public class Shader {
     }
 
     private String getShaderSource(String source, Type type) throws IOException {
-        return getShaderSource(source, type, 0);
-    }
+        if (!source.contains(type.s))
+            throw new IOException("Missing source '" + type.s + "' shader.");
 
-    private String getShaderSource(String source, Type type, int start) throws IOException {
-        int index = source.indexOf("#type", start) + "#type ".length();
-        int eol = source.indexOf("\r\n", index);
-        String pattern = source.substring(index, eol);
+        int index, eol = 0, iter = 0;
+        String pattern = "";
 
-        if (pattern.equals(type.s)) {
-            return start == 0 ? source.split(REG_EX)[1] : source.split(REG_EX)[2];
-        }
+        do {
+            index = source.indexOf("#type", eol) + "#type ".length();
+            eol = source.indexOf("\r\n", index);
+            pattern = source.substring(index, eol);
+            iter++;
+        } while (!pattern.contains(type.s));
 
-        throw new IOException("Missing source '" + type.s + "' shader.");
+        return source.split(REG_EX)[iter];
     }
 
     public void compileAndLinkShaders() {
