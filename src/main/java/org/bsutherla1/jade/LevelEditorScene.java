@@ -36,7 +36,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void init() {
         defaultShader = new Shader("assets/shaders/default.glsl");
-        defaultShader.compile();
+        defaultShader.compileAndLinkShaders();
 
         // ============================================================
         // Generate VAO, VBO, and EBO buffer objects, and send to GPU
