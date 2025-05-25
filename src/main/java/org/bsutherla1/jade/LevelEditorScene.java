@@ -1,6 +1,7 @@
 package org.bsutherla1.jade;
 
 import org.bsutherla1.renderer.Shader;
+import org.bsutherla1.util.Time;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
@@ -78,12 +79,16 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void update(float dt) {
+        camera.position.x -= dt * 50.0f;
+        camera.position.y -= dt * 20.0f;
+
         // Bind shader program
         defaultShader.use();
 
         // Quick and dirty update to test camera
         defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uView", camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getTime());
 
         // Bind VAO that we're using
         glBindVertexArray(vaoID);
