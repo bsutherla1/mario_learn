@@ -1,5 +1,7 @@
 package org.bsutherla1.jade;
 
+import org.bsutherla1.components.FontRenderer;
+import org.bsutherla1.components.SpriteRenderer;
 import org.bsutherla1.renderer.Shader;
 import org.bsutherla1.renderer.Texture;
 import org.bsutherla1.util.Time;
@@ -34,12 +36,21 @@ public class LevelEditorScene extends Scene {
     private Shader defaultShader;
     private Texture testTexture;
 
+    private GameObject testObj;
+    private boolean firstTime = false;
+
     public LevelEditorScene() {
 
     }
 
     @Override
     public void init() {
+        System.out.println("Creating 'test object'");
+        this.testObj = new GameObject("test object");
+        this.testObj.addComponent(new SpriteRenderer());
+        this.testObj.addComponent(new FontRenderer());
+        this.addGameObjectToScene(this.testObj);
+
         this.camera = new Camera(new Vector2f(-200, -300));
         defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compileAndLinkShaders();
@@ -122,5 +133,17 @@ public class LevelEditorScene extends Scene {
         glBindVertexArray(0);
 
         defaultShader.detach();
+
+        if (!firstTime) {
+            System.out.println("Creating gameObject!");
+            GameObject go = new GameObject("Game Test 2");
+            go.addComponent(new SpriteRenderer());
+            this.addGameObjectToScene(go);
+            firstTime = true;
+        }
+
+        for (GameObject go : this.gameObjects) {
+            go.update(dt);
+        }
     }
 }
