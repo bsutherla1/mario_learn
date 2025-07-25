@@ -1,6 +1,8 @@
 package org.bsutherla1.jade;
 
+import org.bsutherla1.components.Sprite;
 import org.bsutherla1.components.SpriteRenderer;
+import org.bsutherla1.components.Spritesheet;
 import org.bsutherla1.util.AssetPool;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -13,21 +15,28 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
+        loadResources();
+
         camera = new Camera(new Vector2f());
 
+        Spritesheet sprites = AssetPool.getSpritesheet("assets/images/spritesheet.png");
+
         GameObject obj1 = new GameObject("Object 1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)));
-        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage.jpg")));
+        obj1.addComponent(new SpriteRenderer(sprites.getSprite(0)));
         addGameObjectToScene(obj1);
 
         GameObject obj2 = new GameObject("Object 2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)));
-        obj2.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage.png")));
+        obj2.addComponent(new SpriteRenderer(sprites.getSprite(15)));
         addGameObjectToScene(obj2);
 
-        loadResources();
+
     }
 
     private void loadResources() {
         AssetPool.getShader("assets/shaders/default.glsl");
+        AssetPool.addSpritesheet("assets/images/spritesheet.png",
+                new Spritesheet(AssetPool.getTexture("assets/images/spritesheet.png"),
+                        16, 16, 26, 0));
     }
 
     @Override

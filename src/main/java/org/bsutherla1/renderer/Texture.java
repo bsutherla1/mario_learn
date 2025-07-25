@@ -12,6 +12,7 @@ import static org.lwjgl.stb.STBImage.*;
 public class Texture {
     private String filepath;
     private int texID;
+    private int width, height;
 
     public Texture(String filepath) throws IOException {
         this.filepath = filepath;
@@ -38,6 +39,9 @@ public class Texture {
             throw new IOException("Error: Could not load image '" + filepath + "'");
         }
 
+        this.width = width.get(0);
+        this.height = height.get(0);
+
         if (channels.get(0) < 3 || channels.get(0) > 4) {
             stbi_image_free(image);
             throw new IOException("Error: Image '" + filepath + "' has "
@@ -58,4 +62,8 @@ public class Texture {
     public void unBind() {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+
+    public int getWidth() { return width; }
+
+    public int getHeight() { return height; }
 }
