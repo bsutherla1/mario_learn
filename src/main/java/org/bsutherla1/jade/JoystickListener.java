@@ -2,7 +2,6 @@ package org.bsutherla1.jade;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
 
