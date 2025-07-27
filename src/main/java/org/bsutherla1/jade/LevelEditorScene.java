@@ -1,11 +1,9 @@
 package org.bsutherla1.jade;
 
-import org.bsutherla1.components.Sprite;
 import org.bsutherla1.components.SpriteRenderer;
 import org.bsutherla1.components.Spritesheet;
 import org.bsutherla1.util.AssetPool;
 import org.joml.Vector2f;
-import org.joml.Vector4f;
 
 public class LevelEditorScene extends Scene {
 
