@@ -8,17 +8,23 @@ public class GameObject {
     private String name;
     private List<Component> components;
     public Transform transform;
+    private int zIndex;
 
     public GameObject(String name) {
-        init(name, new Transform());
+        init(name, new Transform(), 0);
     }
 
     public GameObject(String name, Transform transform) {
-        init(name, transform);
+        init(name, transform, 0);
     }
 
-    public void init(String name, Transform transform) {
+    public GameObject(String name, Transform transform, int zIndex) {
+        init(name, transform, zIndex);
+    }
+
+    public void init(String name, Transform transform, int zIndex) {
         this.name = name;
+        this.zIndex = zIndex;
         this.components = new ArrayList<>();
         this.transform = transform;
     }
@@ -64,5 +70,9 @@ public class GameObject {
         for (Component component : components) {
             component.start();
         }
+    }
+
+    public int zIndex() {
+        return zIndex;
     }
 }

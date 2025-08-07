@@ -3,6 +3,7 @@ package org.bsutherla1.renderer;
 import org.bsutherla1.components.SpriteRenderer;
 import org.bsutherla1.jade.Window;
 import org.bsutherla1.util.AssetPool;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -13,7 +14,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class RenderBatch {
+public class RenderBatch implements Comparable<RenderBatch> {
     // Vertex
     // ======
     // Pos              Color                       tex coords      tex id
@@ -40,11 +41,13 @@ public class RenderBatch {
     private int vaoID, vboID;
     private final int maxBatchSize;
     private final Shader shader;
+    private int zIndex;
 
-    public RenderBatch(int maxBatchSize) {
+    public RenderBatch(int maxBatchSize, int zIndex) {
         shader = AssetPool.getShader("assets/shaders/default.glsl");
         sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
+        this.zIndex = zIndex;
 
         // 4 vertices quad
         vertices = new float[maxBatchSize * 4 * VERTEX_SIZE];
@@ -238,5 +241,14 @@ public class RenderBatch {
 
     public boolean hasTexture(Texture tex) {
         return textures.contains(tex);
+    }
+
+    public int zIndex() {
+        return zIndex;
+    }
+
+    @Override
+    public int compareTo(@NotNull RenderBatch o) {
+        return Integer.compare(zIndex, o.zIndex);
     }
 }
